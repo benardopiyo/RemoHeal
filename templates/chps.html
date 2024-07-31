@@ -1,0 +1,289 @@
+<html><head><base href="https://aimedical.app/">
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>Community Health Promoter - Patient Information Capture</title>
+<style>
+  :root {
+    --primary-color: #1E88E5;
+    --secondary-color: #1565C0;
+    --background-color: #E3F2FD;
+    --form-background: #ffffff;
+    --text-color: #333333;
+    --input-border: #90CAF9;
+    --input-focus: #42A5F5;
+  }
+
+  body {
+    font-family: 'Roboto', Arial, sans-serif;
+    background-color: var(--background-color);
+    margin: 0;
+    padding: 20px;
+    color: var(--text-color);
+  }
+
+  .container {
+    max-width: 800px;
+    margin: 0 auto;
+    background-color: var(--form-background);
+    border-radius: 15px;
+    box-shadow: 0 0 20px rgba(30, 136, 229, 0.2);
+    padding: 30px;
+  }
+
+  h1 {
+    color: var(--primary-color);
+    text-align: center;
+    font-size: 2.5em;
+    margin-bottom: 30px;
+    text-shadow: 1px 1px 2px rgba(0, 0, 0, 0.1);
+  }
+
+  form {
+    display: grid;
+    gap: 20px;
+  }
+
+  .form-group {
+    margin-bottom: 15px;
+  }
+
+  label {
+    font-weight: bold;
+    display: block;
+    margin-bottom: 5px;
+    color: var(--secondary-color);
+  }
+
+  input[type="text"],
+  input[type="number"],
+  input[type="tel"],
+  input[type="date"],
+  select,
+  textarea {
+    width: 100%;
+    padding: 12px;
+    border: 1px solid var(--input-border);
+    border-radius: 8px;
+    box-sizing: border-box;
+    font-size: 16px;
+    transition: all 0.3s ease;
+  }
+
+  input:focus,
+  select:focus,
+  textarea:focus {
+    outline: none;
+    border-color: var(--input-focus);
+    box-shadow: 0 0 0 2px rgba(66, 165, 245, 0.2);
+  }
+
+  button {
+    background-color: var(--primary-color);
+    color: white;
+    border: none;
+    padding: 15px 30px;
+    border-radius: 8px;
+    cursor: pointer;
+    transition: all 0.3s ease;
+    font-size: 18px;
+    font-weight: bold;
+    text-transform: uppercase;
+    box-shadow: 0 4px 6px rgba(0, 0, 0, 0.1);
+  }
+
+  button:hover {
+    background-color: var(--secondary-color);
+    transform: translateY(-2px);
+    box-shadow: 0 6px 8px rgba(0, 0, 0, 0.15);
+  }
+
+  button:active {
+    transform: translateY(0);
+    box-shadow: 0 2px 4px rgba(0, 0, 0, 0.1);
+  }
+
+  .vital-signs {
+    display: grid;
+    grid-template-columns: repeat(auto-fit, minmax(200px, 1fr));
+    gap: 20px;
+    background-color: #BBDEFB;
+    padding: 20px;
+    border-radius: 10px;
+    margin-top: 20px;
+  }
+
+  .vital-signs h2 {
+    grid-column: 1 / -1;
+    color: var(--secondary-color);
+    margin-bottom: 10px;
+  }
+
+  @keyframes fadeIn {
+    from { opacity: 0; transform: translateY(-20px); }
+    to { opacity: 1; transform: translateY(0); }
+  }
+
+  .container {
+    animation: fadeIn 0.5s ease-out;
+  }
+
+  /* Custom scrollbar */
+  ::-webkit-scrollbar {
+    width: 10px;
+  }
+
+  ::-webkit-scrollbar-track {
+    background: #E3F2FD;
+  }
+
+  ::-webkit-scrollbar-thumb {
+    background: #90CAF9;
+    border-radius: 5px;
+  }
+
+  ::-webkit-scrollbar-thumb:hover {
+    background: #42A5F5;
+  }
+</style>
+</head>
+<body>
+  <div class="container">
+    <h1>Community Health Promoter</h1>
+    <form id="patient-form" action="/doctor" method="post">
+      <div class="form-group">
+        <label for="name">Patient Name:</label>
+        <input type="text" id="name" name="name" required>
+      </div>
+      
+      <div class="form-group">
+        <label for="id">Patient ID:</label>
+        <input type="text" id="id" name="id" required>
+      </div>
+      
+      <div class="form-group">
+        <label for="age">Age:</label>
+        <input type="number" id="age" name="age" required>
+      </div>
+      
+      <div class="form-group">
+        <label for="gender">Gender:</label>
+        <select id="gender" name="gender" required>
+          <option value="">Select gender</option>
+          <option value="male">Male</option>
+          <option value="female">Female</option>
+          <option value="other">Other</option>
+        </select>
+      </div>
+      
+      <div class="form-group">
+        <label for="phone">Phone Number:</label>
+        <input type="tel" id="phone" name="phone">
+      </div>
+      
+      <div class="form-group">
+        <label for="address">Address:</label>
+        <textarea id="address" name="address" rows="3"></textarea>
+      </div>
+      
+      <div class="form-group">
+        <label for="visit-date">Visit Date:</label>
+        <input type="date" id="visit-date" name="visit-date" required>
+      </div>
+      
+      <div class="vital-signs">
+        <h2>Vital Signs</h2>
+        <div class="form-group">
+          <label for="heart-rate">Heart Rate (bpm):</label>
+          <input type="number" id="heart-rate" name="heart-rate">
+        </div>
+        
+        <div class="form-group">
+          <label for="blood-pressure">Blood Pressure (mmHg):</label>
+          <input type="text" id="blood-pressure" name="blood-pressure" placeholder="e.g., 120/80">
+        </div>
+        
+        <div class="form-group">
+          <label for="temperature">Temperature (°C):</label>
+          <input type="number" id="temperature" name="temperature" step="0.1">
+        </div>
+        
+        <div class="form-group">
+          <label for="oxygen-saturation">Oxygen Saturation (%):</label>
+          <input type="number" id="oxygen-saturation" name="oxygen-saturation">
+        </div>
+        
+        <div class="form-group">
+          <label for="respiratory-rate">Respiratory Rate (breaths/min):</label>
+          <input type="number" id="respiratory-rate" name="respiratory-rate">
+        </div>
+        
+        <div class="form-group">
+          <label for="glucose-level">Glucose Level (mg/dL):</label>
+          <input type="number" id="glucose-level" name="glucose-level">
+        </div>
+      </div>
+      
+      <div class="form-group">
+        <label for="symptoms">Symptoms:</label>
+        <textarea id="symptoms" name="symptoms" rows="4"></textarea>
+      </div>
+      
+      <div class="form-group">
+        <label for="notes">Additional Notes:</label>
+        <textarea id="notes" name="notes" rows="4"></textarea>
+      </div>
+      
+      <button type="submit">Submit Patient Information</button>
+    </form>
+  </div>
+
+  <!-- <script>
+    document.getElementById('patient-form').addEventListener('submit', function(e) {
+      e.preventDefault();
+      
+      // Collect form data
+      const formData = new FormData(this);
+      const patientData = Object.fromEntries(formData.entries());
+      
+      // Simulate sending data to the doctor's portal
+      sendToDoctor(patientData);
+    });
+
+    function sendToDoctor(patientData) {
+      // In a real-world scenario, this function would use AJAX or fetch to send data to a server
+      console.log("Sending patient data to doctor's portal:", patientData);
+      
+      // Simulating a successful submission
+      alert("Patient information successfully sent to the doctor's portal!");
+      
+      // Clear the form after successful submission
+      document.getElementById('patient-form').reset();
+    }
+
+    // Add some interactivity
+    const inputs = document.querySelectorAll('input, select, textarea');
+    inputs.forEach(input => {
+      input.addEventListener('focus', function() {
+        this.style.transform = 'scale(1.02)';
+        this.style.transition = 'all 0.3s ease';
+        this.style.boxShadow = '0 0 10px rgba(66, 165, 245, 0.3)';
+      });
+      input.addEventListener('blur', function() {
+        this.style.transform = 'scale(1)';
+        this.style.boxShadow = 'none';
+      });
+    });
+
+    // Add a simple loading animation
+    const button = document.querySelector('button[type="submit"]');
+    button.addEventListener('click', function() {
+      this.innerHTML = '<span class="loading"></span> Submitting...';
+      this.disabled = true;
+      setTimeout(() => {
+        this.innerHTML = 'Submit Patient Information';
+        this.disabled = false;
+      }, 2000);
+    });
+  </script> -->
+</body>
+</html>

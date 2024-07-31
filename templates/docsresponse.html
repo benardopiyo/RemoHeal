@@ -1,0 +1,238 @@
+<html><head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>Doctor's Portal - Prescription</title>
+<style>
+  body {
+    font-family: Arial, sans-serif;
+    background-color: #f0f4f8;
+    margin: 0;
+    padding: 20px;
+  }
+  .container {
+    max-width: 800px;
+    margin: 0 auto 20px;
+    background-color: #ffffff;
+    border-radius: 10px;
+    box-shadow: 0 0 10px rgba(0,0,0,0.1);
+    padding: 20px;
+  }
+  h1, h2 {
+    color: #2c3e50;
+    text-align: center;
+  }
+  .patient-info, .vitals {
+    margin-bottom: 20px;
+  }
+  .vital-item {
+    display: flex;
+    justify-content: space-between;
+    margin-bottom: 10px;
+  }
+  .prescription-form {
+    display: grid;
+    gap: 15px;
+  }
+  label {
+    font-weight: bold;
+  }
+  input[type="text"], textarea, select {
+    width: 100%;
+    padding: 8px;
+    border: 1px solid #ddd;
+    border-radius: 4px;
+    box-sizing: border-box;
+  }
+  textarea {
+    height: 100px;
+  }
+  button {
+    background-color: #3498db;
+    color: white;
+    border: none;
+    padding: 10px 20px;
+    border-radius: 5px;
+    cursor: pointer;
+    transition: background-color 0.3s ease;
+  }
+  button:hover {
+    background-color: #2980b9;
+  }
+  .prescription-list {
+    margin-top: 30px;
+  }
+  .prescription-item {
+    background-color: #ecf0f1;
+    border-radius: 8px;
+    padding: 15px;
+    margin-bottom: 15px;
+  }
+</style>
+</head>
+<body>
+  <div class="container">
+    <h1>Doctor's Portal - Prescription</h1>
+    
+    <div class="patient-info">
+      <h2>Patient Information</h2>
+      <p><strong>Name:</strong> <span id="patient-name">Loading...</span></p>
+      <p><strong>ID:</strong> <span id="patient-id">Loading...</span></p>
+      <p><strong>Age:</strong> <span id="patient-age">Loading...</span></p>
+    </div>
+    
+    <div class="vitals">
+      <h2>Latest Vitals</h2>
+      <div class="vital-item">
+        <span>Heart Rate:</span>
+        <span id="heart-rate">Loading...</span>
+      </div>
+      <div class="vital-item">
+        <span>Blood Pressure:</span>
+        <span id="blood-pressure">Loading...</span>
+      </div>
+      <div class="vital-item">
+        <span>Temperature:</span>
+        <span id="temperature">Loading...</span>
+      </div>
+      <div class="vital-item">
+        <span>Oxygen Saturation:</span>
+        <span id="oxygen-saturation">Loading...</span>
+      </div>
+      <div class="vital-item">
+        <span>Respiratory Rate:</span>
+        <span id="respiratory-rate">Loading...</span>
+      </div>
+      <div class="vital-item">
+        <span>Glucose Level:</span>
+        <span id="glucose-level">Loading...</span>
+      </div>
+    </div>
+    
+    <div class="prescription-form">
+      <h2>Write Prescription</h2>
+      <div>
+        <label for="medication">Medication:</label>
+        <input type="text" id="medication" required>
+      </div>
+      <div>
+        <label for="dosage">Dosage:</label>
+        <input type="text" id="dosage" required>
+      </div>
+      <div>
+        <label for="frequency">Frequency:</label>
+        <select id="frequency" required>
+          <option value="">Select frequency</option>
+          <option value="Once daily">Once daily</option>
+          <option value="Twice daily">Twice daily</option>
+          <option value="Three times daily">Three times daily</option>
+          <option value="Four times daily">Four times daily</option>
+          <option value="As needed">As needed</option>
+        </select>
+      </div>
+      <div>
+        <label for="duration">Duration:</label>
+        <input type="text" id="duration" required>
+      </div>
+      <div>
+        <label for="instructions">Special Instructions:</label>
+        <textarea id="instructions"></textarea>
+      </div>
+      <button onclick="addPrescription()">Add Prescription</button>
+    </div>
+    
+    <div class="prescription-list">
+      <h2>Prescriptions</h2>
+      <div id="prescriptions-container"></div>
+      <a href="/patientpresc"><button>Submit</button></a>
+    </div>
+  </div>
+
+  <script>
+    // Simulated patient data
+    const patient = {
+      name: "Lorna Moses",
+      id: "SF12345",
+      age: 45,
+      vitals: {
+        heartRate: 72,
+        bloodPressure: "120/80",
+        temperature: 98.6,
+        oxygenSaturation: 98,
+        respiratoryRate: 16,
+        glucoseLevel: 100
+      }
+    };
+
+    // Load patient data
+    document.getElementById('patient-name').textContent = patient.name;
+    document.getElementById('patient-id').textContent = patient.id;
+    document.getElementById('patient-age').textContent = patient.age;
+
+    // Load vitals
+    document.getElementById('heart-rate').textContent = patient.vitals.heartRate + " bpm";
+    document.getElementById('blood-pressure').textContent = patient.vitals.bloodPressure + " mmHg";
+    document.getElementById('temperature').textContent = patient.vitals.temperature + " °F";
+    document.getElementById('oxygen-saturation').textContent = patient.vitals.oxygenSaturation + "%";
+    document.getElementById('respiratory-rate').textContent = patient.vitals.respiratoryRate + " breaths/min";
+    document.getElementById('glucose-level').textContent = patient.vitals.glucoseLevel + " mg/dL";
+
+    let prescriptions = [];
+
+    function addPrescription() {
+      const medication = document.getElementById('medication').value;
+      const dosage = document.getElementById('dosage').value;
+      const frequency = document.getElementById('frequency').value;
+      const duration = document.getElementById('duration').value;
+      const instructions = document.getElementById('instructions').value;
+
+      if (medication && dosage && frequency && duration) {
+        const prescription = {
+          medication,
+          dosage,
+          frequency,
+          duration,
+          instructions
+        };
+
+        prescriptions.push(prescription);
+        updatePrescriptionList();
+        clearForm();
+      } else {
+        alert("Please fill all required fields.");
+      }
+    }
+
+    function updatePrescriptionList() {
+      const container = document.getElementById('prescriptions-container');
+      container.innerHTML = '';
+
+      prescriptions.forEach((prescription, index) => {
+        const prescriptionElement = document.createElement('div');
+        prescriptionElement.className = 'prescription-item';
+        prescriptionElement.innerHTML = `
+          <h3>${prescription.medication}</h3>
+          <p><strong>Dosage:</strong> ${prescription.dosage}</p>
+          <p><strong>Frequency:</strong> ${prescription.frequency}</p>
+          <p><strong>Duration:</strong> ${prescription.duration}</p>
+          <p><strong>Instructions:</strong> ${prescription.instructions || 'N/A'}</p>
+          <button onclick="removePrescription(${index})">Remove</button>
+        `;
+        container.appendChild(prescriptionElement);
+      });
+    }
+
+    function clearForm() {
+      document.getElementById('medication').value = '';
+      document.getElementById('dosage').value = '';
+      document.getElementById('frequency').value = '';
+      document.getElementById('duration').value = '';
+      document.getElementById('instructions').value = '';
+    }
+
+    function removePrescription(index) {
+      prescriptions.splice(index, 1);
+      updatePrescriptionList();
+    }
+  </script>
+</body>
+</html>

@@ -1,0 +1,211 @@
+<html><head><base href="https://aimedical.app/">
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>Patient Portal - Prescriptions</title>
+<style>
+  body {
+    font-family: Arial, sans-serif;
+    background-color: #f0f4f8;
+    margin: 0;
+    padding: 20px;
+  }
+  .container {
+    max-width: 800px;
+    margin: 0 auto 20px;
+    background-color: #ffffff;
+    border-radius: 10px;
+    box-shadow: 0 0 10px rgba(0,0,0,0.1);
+    padding: 20px;
+  }
+  h1, h2 {
+    color: #2c3e50;
+    text-align: center;
+  }
+  .patient-info {
+    margin-bottom: 20px;
+  }
+  .prescription-list {
+    margin-top: 30px;
+  }
+  .prescription-item {
+    background-color: #ecf0f1;
+    border-radius: 8px;
+    padding: 15px;
+    margin-bottom: 15px;
+  }
+  .prescription-item h3 {
+    margin-top: 0;
+    color: #3498db;
+  }
+  .prescription-item p {
+    margin: 5px 0;
+  }
+  .status {
+    font-weight: bold;
+    text-transform: uppercase;
+  }
+  .status-new {
+    color: #27ae60;
+  }
+  .status-active {
+    color: #f39c12;
+  }
+  .status-completed {
+    color: #7f8c8d;
+  }
+  button {
+    background-color: #3498db;
+    color: white;
+    border: none;
+    padding: 10px 20px;
+    border-radius: 5px;
+    cursor: pointer;
+    transition: background-color 0.3s ease;
+  }
+  button:hover {
+    background-color: #2980b9;
+  }
+  .notification {
+    background-color: #e74c3c;
+    color: white;
+    text-align: center;
+    padding: 10px;
+    border-radius: 5px;
+    margin-bottom: 20px;
+    display: none;
+  }
+</style>
+</head>
+<body>
+  <div class="container">
+    <h1>Patient Portal - Prescriptions</h1>
+    
+    <div class="notification" id="notification">
+      You have a new prescription! Please review it below.
+    </div>
+    
+    <div class="patient-info">
+      <h2>Patient Information</h2>
+      <p><strong>Name:</strong> <span id="patient-name">Loading...</span></p>
+      <p><strong>ID:</strong> <span id="patient-id">Loading...</span></p>
+      <p><strong>Age:</strong> <span id="patient-age">Loading...</span></p>
+    </div>
+    
+    <div class="prescription-list">
+      <h2>Your Prescriptions</h2>
+      <div id="prescriptions-container"></div>
+    </div>
+  </div>
+
+  <script>
+    // Simulated patient data
+    const patient = {
+      name: "Lorna Moses",
+      id: "SF12345",
+      age: 45
+    };
+
+    // Load patient data
+    document.getElementById('patient-name').textContent = patient.name;
+    document.getElementById('patient-id').textContent = patient.id;
+    document.getElementById('patient-age').textContent = patient.age;
+
+    // Simulated prescriptions (in a real scenario, these would be fetched from a server)
+    let prescriptions = [
+      {
+        id: 1,
+        medication: "Amoxicillin",
+        dosage: "500mg",
+        frequency: "Three times daily",
+        duration: "7 days",
+        instructions: "Take with food",
+        status: "new",
+        dateIssued: "2023-06-01"
+      },
+      {
+        id: 2,
+        medication: "Ibuprofen",
+        dosage: "400mg",
+        frequency: "As needed",
+        duration: "5 days",
+        instructions: "Take for pain relief",
+        status: "active",
+        dateIssued: "2023-05-28"
+      },
+      {
+        id: 3,
+        medication: "Lisinopril",
+        dosage: "10mg",
+        frequency: "Once daily",
+        duration: "30 days",
+        instructions: "Take in the morning",
+        status: "completed",
+        dateIssued: "2023-05-01"
+      }
+    ];
+
+    function updatePrescriptionList() {
+      const container = document.getElementById('prescriptions-container');
+      container.innerHTML = '';
+
+      prescriptions.forEach((prescription) => {
+        const prescriptionElement = document.createElement('div');
+        prescriptionElement.className = 'prescription-item';
+        prescriptionElement.innerHTML = `
+          <h3>${prescription.medication}</h3>
+          <p><strong>Dosage:</strong> ${prescription.dosage}</p>
+          <p><strong>Frequency:</strong> ${prescription.frequency}</p>
+          <p><strong>Duration:</strong> ${prescription.duration}</p>
+          <p><strong>Instructions:</strong> ${prescription.instructions || 'N/A'}</p>
+          <p><strong>Date Issued:</strong> ${prescription.dateIssued}</p>
+          <p><strong>Status:</strong> <span class="status status-${prescription.status}">${prescription.status}</span></p>
+          ${prescription.status === 'new' ? '<button onclick="acknowledgePrescription(' + prescription.id + ')">Acknowledge</button>' : ''}
+        `;
+        container.appendChild(prescriptionElement);
+      });
+
+      checkNewPrescriptions();
+    }
+
+    function acknowledgePrescription(id) {
+      const prescription = prescriptions.find(p => p.id === id);
+      if (prescription) {
+        prescription.status = 'active';
+        updatePrescriptionList();
+      }
+    }
+
+    function checkNewPrescriptions() {
+      const hasNewPrescription = prescriptions.some(p => p.status === 'new');
+      const notification = document.getElementById('notification');
+      if (hasNewPrescription) {
+        notification.style.display = 'block';
+      } else {
+        notification.style.display = 'none';
+      }
+    }
+
+    // Simulating real-time updates
+    function simulateNewPrescription() {
+      const newPrescription = {
+        id: prescriptions.length + 1,
+        medication: "Metformin",
+        dosage: "500mg",
+        frequency: "Twice daily",
+        duration: "30 days",
+        instructions: "Take with meals",
+        status: "new",
+        dateIssued: new Date().toISOString().split('T')[0]
+      };
+      prescriptions.unshift(newPrescription);
+      updatePrescriptionList();
+    }
+
+    // Initial load
+    updatePrescriptionList();
+
+    // Simulating a new prescription after 10 seconds
+    setTimeout(simulateNewPrescription, 10000);
+  </script>
+</body>
+</html>
